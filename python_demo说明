@@ -1,0 +1,2 @@
+client_sub_pub_demo.py 使用 paho.mqtt.client类 进行 循环定时发布（5个topic），并且订阅现实所有的消息
+context.pyc 文件必须在app文件夹内
