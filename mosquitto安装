@@ -1,0 +1,8 @@
+1，直接在linux中运行 sudo apt install mosquitto,即可完成安装, 如果出错，则先sudo apt update
+2，mosquitto安装后最自动运行；如果没运行，可用 service mosquitto status查看状态，service mosquitto start启动mqtt服务
+3，mosquitto还自带client的功能指令；服务启动后可用命令行模拟client测试server的功能
+    3.1，用一个终端 订阅所有的主题：    mosquitto_sub -h localhost -t "#"
+    3.2，用另一个终端 发布一个主题：    mosquitto_pub -h localhost -t "topic1" -m "hello-mqtt" -q 1
+    3.3，此时，可在订阅终端看到 topic1 的 “hello-mqtt”内容；说明 基于raw tcp的mqtt服务运行正常
+4，mutt的默认端口： raw tcp:1883      raw tcp with ssl:8883     websocket:9001
+    
