@@ -5,4 +5,10 @@
 
 3，在linux中安装mqtt client : python的方法 和 代码例程
 
+  3.1 先装好 python： sudo get install python
+  
+  3.2 再装mqtt client包： pip install paho-mqtt
+  
+  3.3 试运行一下： client_sub_pub_demo.py
+
 4，在linux中安装mqtt client : c for embedded的方法 和 代码例程（还没搞定）
