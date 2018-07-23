@@ -1,4 +1,4 @@
-# mqtt-python 学习记录
+# mqtt学习记录
 1，在linux中安装mqtt server：mosquitto的方法
 
 2，配置 mosquitto 为同时支持 raw tcp协议 和 websocket 的方法
