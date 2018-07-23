@@ -1,7 +1,13 @@
 # mqtt-python 学习记录
 1，在linux中安装mqtt server：mosquitto的方法
 
-2，配置 mosquitto 为同时支持 raw tcp协议 和 websocket 的方法（还没搞定）
+2，配置 mosquitto 为同时支持 raw tcp协议 和 websocket 的方法
+
+  2.1， 修改 /etc/mosquitto/mosquitto.conf文件
+  
+  2.2，在default listener中，改 port 1883   和   protocol mqtt
+  
+  2.3，在extra listener中，改 listener 9001 、 protocol websockets、 http_dir /home/tomcat/http_dir(随便一个目录)
 
 3，在linux中安装mqtt client : python的方法 和 代码例程
 
