@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>MQTT client via websockets</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <h3>通过网页，用websocket方式，向MQTT服务器 发布和订阅</h3>
+    <p>默认情况下，MQTT服务器只提供mqtt协议解析
+    <br>网页中，只能走http协议，所以要求MQTT服务器开通 websockets功能
+    <br>webservice 服务器地址：gariel.top:9001
+    <br> mqtt raw-tcp 服务器地址：gariel.top:1883</p>
+
+    <h4> 一：用本网页手动自发自收，订阅的主题 “chat”</h4>
+    <input type="textarea" id="msg" placeholder="输入发送消息">
+    <button type="submit" onclick="sendMsg()">发送</button>
+    <p>收到的消息:</p>  
+    <textarea rows="5" id="messageShow"></textarea>
+
+    <h4> 二：用本网页接收IOT设备持续发送的消息，订阅的主题 "m1/sig_a"~"m1/sig_e"</h4>
+    <textarea rows="5" id="m1/sig_a" onfocus="this.scrollTop = this.scrollHeight "></textarea>
+    <textarea rows="5" id="m1/sig_b" onfocus="this.scrollTop = this.scrollHeight "></textarea>
+    <textarea rows="5" id="m1/sig_c" onfocus="this.scrollTop = this.scrollHeight "></textarea>
+    <textarea rows="5" id="m1/sig_d" onfocus="this.scrollTop = this.scrollHeight "></textarea>
+    <textarea rows="5" id="m1/sig_e" onfocus="this.scrollTop = this.scrollHeight "></textarea>
+
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script> 
+    <script src="https://cdn.bootcss.com/paho-mqtt/1.0.2/mqttws31.min.js"></script>
+    <script>       
+            client = new Paho.MQTT.Client("www.gariel.top", Number(9001), "websockets-test");//建立客户端实例
+            client.connect({onSuccess:onConnect});//连接服务器并注册连接成功处理事件  
+            function onConnect() {  
+              console.log("onConnected");  
+              client.subscribe("chat");//订阅主题
+              client.subscribe("m1/sig_a");//订阅主题
+              client.subscribe("m1/sig_b");//订阅主题
+              client.subscribe("m1/sig_c");//订阅主题
+              client.subscribe("m1/sig_d");//订阅主题
+              client.subscribe("m1/sig_e");//订阅主题
+              console.log("subscribed");  
+              //发送消息  
+              message = new Paho.MQTT.Message("Auto send 1st msg");
+              message.destinationName = "chat";
+            client.send(message);  
+            console.log("sended")
+
+            }  
+            client.onConnectionLost = onConnectionLost;//注册连接断开处理事件  
+            client.onMessageArrived = onMessageArrived;//注册消息接收处理事件  
+            function onConnectionLost(responseObject) {  
+                if (responseObject.errorCode !== 0) {  
+                    console.log("onConnectionLost:"+responseObject.errorMessage);  
+                    console.log("连接已断开");  
+                 }  
+            }  
+            function onMessageArrived(message) {  
+              console.log("收到消息:"+message.payloadString);  
+              if (message.destinationName == "chat")
+                document.getElementById("messageShow").value+=message.payloadString+"\n";
+              else
+                document.getElementById(message.destinationName).value+=message.payloadString+"\n";
+              
+            } 
+
+            function sendMsg() {  
+               message = new Paho.MQTT.Message(document.getElementById("msg").value);  
+               message.destinationName = "chat";
+               client.send(message);  
+               console.log("sended")
+            }           
+
+    </script>
+
+  </body>
+</html>
